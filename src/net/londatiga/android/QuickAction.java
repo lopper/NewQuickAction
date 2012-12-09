@@ -137,6 +137,16 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	 * @param action  {@link ActionItem}
 	 */
 	public void addActionItem(ActionItem action) {
+		addActionItem(action, null);
+	}
+	
+	/**
+	 * Add action item
+	 * 
+	 * @param action  {@link ActionItem}
+	 * @param listener will be called when the action is tapped
+	 */
+	public void addActionItem(ActionItem action, final OnActionItemClickListener listener) {
 		mActionItemList.add(action);
 		
 		String title 	= action.getTitle();
@@ -165,6 +175,9 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		container.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (listener != null) {
+					listener.onItemClick(QuickAction.this, pos, actionId);
+				}
 				if (mItemClickListener != null) {
                     mItemClickListener.onItemClick(QuickAction.this, pos, actionId);
                 }
