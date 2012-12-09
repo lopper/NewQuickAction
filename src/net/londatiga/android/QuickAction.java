@@ -108,7 +108,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		//This was previously defined on show() method, moved here to prevent force close that occured
 		//when tapping fastly on a view to show quickaction dialog.
 		//Thanx to zammbi (github.com/zammbi)
-		mRootView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		mRootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		
 		setContentView(mRootView);
 	}
