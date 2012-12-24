@@ -4,24 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.PopupWindow.OnDismissListener;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
+import android.widget.ImageView;
+import android.widget.PopupWindow.OnDismissListener;
+import android.widget.TextView;
 
 /**
  * QuickAction dialog.
@@ -32,6 +28,7 @@ import android.view.animation.Interpolator;
  * - Kevin Peck <kevinwpeck@gmail.com>
  */
 public class QuickAction extends PopupWindows implements OnDismissListener {
+	private View mViewArea;
 	private ImageView mArrowUp;
 	private ImageView mArrowDown;
 	private Animation mTrackAnim;
@@ -45,7 +42,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	private boolean mDidAction;
 	private boolean mAnimateTrack;
 	
-	private int mChildPos;    
+	private int mChildPos;
     private int mAnimStyle;
     
 	public static final int ANIM_GROW_FROM_LEFT = 1;
@@ -237,13 +234,22 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		int yPos	 		= anchorRect.top - rootHeight;
 
 		boolean onTop		= true;
-		
+
 		// display on bottom
 		if (rootHeight > anchor.getTop()) {
 			yPos 	= anchorRect.bottom;
 			onTop	= false;
 		}
-
+		
+		// display on bottom as default. if no room for root view, display on top
+		if (mViewArea != null) {
+			mViewArea.getLocationOnScreen(location);
+			if (yPos + rootHeight > location[1] + mViewArea.getHeight()) {
+				yPos = anchorRect.top - rootHeight;
+				onTop = true;
+			}
+		}
+		
 		showArrow(((onTop) ? R.id.arrow_down : R.id.arrow_up), anchorRect.centerX());
 		
 		setAnimationStyle(screenWidth, anchorRect.centerX(), onTop);
@@ -341,5 +347,9 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	 */
 	public interface OnDismissListener {
 		public abstract void onDismiss();
+	}
+	
+	public void setViewArea(View v) {
+		mViewArea = v;
 	}
 }
